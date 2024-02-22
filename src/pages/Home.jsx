@@ -1,20 +1,92 @@
+import { useEffect } from "react"
 import Header from "../components/Header"
 import { useState } from "react"
 
 export default function Home() {
     const [valueInput, setValueInput] = useState('')
-
+    const [totalCountries, setTotalCountries] = useState(0)
+    const[countries, setCountries]  =  useState([])
     const handleKeyDown = () => {
 
     }
 
+    const getCountries = () => {
+
+        fetch('https://restcountries.com/v3.1/all?fields=name,flags,population,area,region')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    useEffect(() => {
+        setCountries([
+            {
+              "flags": {
+                "png": "https://flagcdn.com/w320/cy.png",
+                "svg": "https://flagcdn.com/cy.svg",
+                "alt": "The flag of Cyprus has a white field, at the center of which is a copper-colored silhouette of the Island of Cyprus above two green olive branches crossed at the stem."
+              },
+              "name": {
+                "common": "Cyprus",
+                "official": "Republic of Cyprus",
+                "nativeName": {
+                  "ell": {
+                    "official": "Δημοκρατία της Κύπρος",
+                    "common": "Κύπρος"
+                  },
+                  "tur": {
+                    "official": "Kıbrıs Cumhuriyeti",
+                    "common": "Kıbrıs"
+                  }
+                }
+              },
+              "region": "Europe",
+              "area": 9251.0,
+              "population": 1207361
+            },
+            {
+              "flags": {
+                "png": "https://flagcdn.com/w320/er.png",
+                "svg": "https://flagcdn.com/er.svg",
+                "alt": "The flag of Eritrea comprises three triangles — a large red isosceles triangle with its base spanning the hoist end and its apex at the midpoint on the fly end, and a green and blue right-angled triangle above and beneath the red triangle. On the hoist side of the red triangle is a golden vertical olive branch encircled by a golden olive wreath."
+              },
+              "name": {
+                "common": "Eritrea",
+                "official": "State of Eritrea",
+                "nativeName": {
+                  "ara": {
+                    "official": "دولة إرتريا",
+                    "common": "إرتريا‎"
+                  },
+                  "eng": {
+                    "official": "State of Eritrea",
+                    "common": "Eritrea"
+                  },
+                  "tir": {
+                    "official": "ሃገረ ኤርትራ",
+                    "common": "ኤርትራ"
+                  }
+                }
+              },
+              "region": "Africa",
+              "area": 117600.0,
+              "population": 5352000
+            }])
+            setTotalCountries(countries.length)
+    },[])
+
     return (
         <section className="h-screen flex flex-col">
             <Header/>
-            <main className="flex-1 relative bg-[#040404]">
-                <section className="absolute left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] p-[40px] rounded-xl ">
-                    <header className="flex justify-between">
-                        <span className="text-[#6C727F]">Found 234 countries</span>
+            <main className="flex-1 relative bg-[#040404] ">
+                <section className=" w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] py-[24px] px-[32px] rounded-xl border border-[#282B30]">
+                    <header className="flex justify-between items-center text-center	">
+                        <span className="text-[#6C727F] text-[16px] font-medium">{`Found ${totalCountries} countries`}</span>
                         <input 
                             type="text"
                             className='bg-search-image bg-no-repeat bg-[18px] pl-[50px] placeholder-[#6C727F] w-[380px] rounded-3xl py-[12px] px-[24px] bg-[#282B30] text-white'
@@ -23,16 +95,16 @@ export default function Home() {
                             onKeyDown={handleKeyDown}
                         />
                     </header>
-                    <div className="flex">
-                        <section className="flex flex-col px-[20px]">
-                            <div className="flex flex-col">
-                                <label className="text-[#6C727F]">Sort by</label>
+                    <div className="flex gap-[32px]">
+                        <section className="flex flex-col ">
+                            <div className="flex flex-col gap-[8px]">
+                                <label className="text-[#6C727F] font-semibold text-[12px]">Sort by</label>
                                 <select name="" id="">
                                     <option>Population</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="text-[#6C727F]">Region</label>
+                                <label className="text-[#6C727F] font-semibold text-[12px]">Region</label>
                                 <div className="flex flex-wrap">
                                     <div className="bg-[#282B30]">
                                         <span className="text-[#D2D5DA]">Americas</span>
@@ -40,25 +112,39 @@ export default function Home() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label>Status</label>
+                                <label className="text-[#6C727F] font-semibold text-[12px]">Status</label>
                                 <label className="text-[#D2D5DA]">
                                     <input type="checkbox" id="cbox1" value="first_checkbox" /> 
                                     Member of the United Nations
                                 </label>
                                 <label className="text-[#D2D5DA]">
-                                    <input type="checkbox" id="cbox1" value="first_checkbox" /> 
+                                    <input type="checkbox" id="cbox2" value="first_checkbox" /> 
                                     Independent
                                 </label>
                             </div>
                         </section>
                         <section className="flex-1 bg-[#1B1D1F]">
-                            <div className="grid grid-cols-5">
-                                <div className="col-span-1">Label 1</div>
-                                <div className="col-span-1">Label 2</div>
-                                <div className="col-span-1">Label 3</div>
-                                <div className="col-span-1">Label 4</div>
-                                <div className="col-span-1">Label 5</div>
+                            <div className="text-[12px] grid grid-cols-5 gap-[24px] pb-[16px] text-[#6C727F] border-b border-[#6C727F] w-[600px]">
+                                <div className="col-span-1">Flag</div>
+                                <div className="col-span-1">Name</div>
+                                <div className="col-span-1">Population</div>
+                                <div className="col-span-1">Area(km2)</div>
+                                <div className="col-span-1">Region</div>
+
                             </div>
+                            {
+                                countries && (
+                                    countries.map((country, index) => (
+                                        <div key={index} className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]">
+                                            <img className='w-[50px] h-[38px] rounded-md' src={country.flags.png} alt={country.name.common} />
+                                            <h3>{country.name.common}</h3>
+                                            <span className="text-[#D2D5DA]">{country.population}</span>
+                                            <span className="text-[#D2D5DA]">{country.area}</span>                                                                             
+                                            <span className="text-[#D2D5DA]">{country.region}</span>
+                                      </div>
+                                    )) 
+                                )
+                            }
                         </section>
                     </div>
                 </section>
