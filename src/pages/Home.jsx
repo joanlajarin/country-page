@@ -6,6 +6,11 @@ export default function Home() {
     const [valueInput, setValueInput] = useState('')
     const [totalCountries, setTotalCountries] = useState(0)
     const[countries, setCountries]  =  useState([])
+    const[country, setCountry]  =  useState()
+    const [neighbouringCountries, setnNeighbouringCountries] = useState([])
+
+
+    const [showCountries, setShowCountries] = useState(false)
     const handleKeyDown = () => {
 
     }
@@ -77,14 +82,33 @@ export default function Home() {
               "area": 117600.0,
               "population": 5352000
             }])
-            setTotalCountries(countries.length)
     },[])
 
+    const showCountry = (country, event) => {
+        setShowCountries(true)
+        console.log(country)
+        setCountry(country)
+        setnNeighbouringCountries()
+        event.stopPropagation()
+    }
+
+    const closeCountry = () => {
+        setShowCountries(false)
+    }
+
+    useEffect(() => {
+        setTotalCountries(countries.length)
+    }, [countries])
+
     return (
-        <section className="h-screen flex flex-col">
+        <section 
+            className="h-screen flex flex-col"
+            onClick={closeCountry}
+        >
             <Header/>
             <main className="flex-1 relative bg-[#040404] ">
-                <section className=" w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] py-[24px] px-[32px] rounded-xl border border-[#282B30]">
+                <section 
+                    className={`w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] py-[24px] px-[32px] rounded-xl border border-[#282B30] ${showCountries ? 'hidden' : '' }`}>
                     <header className="flex justify-between items-center text-center	">
                         <span className="text-[#6C727F] text-[16px] font-medium">{`Found ${totalCountries} countries`}</span>
                         <input 
@@ -128,18 +152,21 @@ export default function Home() {
                                 <div className="col-span-1">Flag</div>
                                 <div className="col-span-1">Name</div>
                                 <div className="col-span-1">Population</div>
-                                <div className="col-span-1">Area(km2)</div>
+                                <div className="col-span-1">Area(km<sup>2</sup>)</div>
                                 <div className="col-span-1">Region</div>
 
                             </div>
                             {
                                 countries && (
-                                    countries.map((country, index) => (
-                                        <div key={index} className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]">
-                                            <img className='w-[50px] h-[38px] rounded-md' src={country.flags.png} alt={country.name.common} />
+                                    countries.sort((a, b) => b.population - a.population).map((country, index) => (
+                                        <div 
+                                            onClick={(event) => showCountry(country, event)} 
+                                            key={index} 
+                                            className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]">
+                                            <img className='w-[50px] h-[38px] rounded-md' src={country.flags.png} alt={country.name.common}/>
                                             <h3>{country.name.common}</h3>
-                                            <span className="text-[#D2D5DA]">{country.population}</span>
-                                            <span className="text-[#D2D5DA]">{country.area}</span>                                                                             
+                                            <span className="text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                                            <span className="text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>                                                                             
                                             <span className="text-[#D2D5DA]">{country.region}</span>
                                       </div>
                                     )) 
@@ -147,6 +174,59 @@ export default function Home() {
                             }
                         </section>
                     </div>
+                </section>
+                <section 
+                    className={`w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F]  rounded-xl border border-[#282B30] ${showCountries ? '' : 'hidden'}`}
+                >
+                {
+                    country && (
+                        <div className=" flex flex-col items-center">
+                            <img className="absolute top-[-48px] w-[260px] h-[196px] rounded-xl" src={country.flags.png}></img>
+                            <h1 className="text-[32px] text-[#D2D5DA] mt-[164px] mb-[8px]">{country.name.common}</h1>   
+                            <h2 className="text-[16px] text-[#D2D5DA] mb-[40px]">{country.name.official}</h2>     
+                            <div className="flex gap-[40px] mb-[40px] text-[14px] px-[80px]">
+                                <div className="flex text-[#D2D5DA] bg-[#282B30] py-[15px] rounded-xl">
+                                    <label className="px-[20px] border-r border-[#1B1D1F]">Population</label>
+                                    <span className="px-[20px]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                                </div>    
+                                <div className="flex text-[#D2D5DA] bg-[#282B30] py-[15px] rounded-xl">
+                                    <label className="px-[20px] border-r border-[#1B1D1F]">Area(km<sup>2</sup>) </label>
+                                    <span className="px-[20px]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                                </div>    
+                            </div>    
+                            <div className="flex flex-col text-[14px] w-full">
+                                <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
+                                    <label>Capital</label>
+                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                </div>
+                                <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
+                                    <label>Subregion</label>
+                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                </div>
+                                <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
+                                    <label>Language</label>
+                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                </div>
+                                <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
+                                    <label>Currencies</label>
+                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                </div>
+                                <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
+                                    <label>Continents</label>
+                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                </div>
+                                <div className="flex p-[20px] flex-col text-[#6C727F] border-y border-y-[#282B30]">
+                                    <label>Neighbouring Countries</label> 
+                                    {
+                     //                   neighbouringCountries && (
+                       //                     neighbouringCountries.map()
+                         //               )
+                                    }
+                                </div>
+                            </div>     
+                        </div>
+                    )
+                }
                 </section>
             </main>
         </section>
