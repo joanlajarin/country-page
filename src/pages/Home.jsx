@@ -5,8 +5,10 @@ import { useState } from "react"
 export default function Home() {
     const [valueInput, setValueInput] = useState('')
     const [totalCountries, setTotalCountries] = useState(0)
-    const[countries, setCountries]  =  useState([])
-    const[country, setCountry]  =  useState()
+    const [countries, setCountries]  =  useState([])
+    const [country, setCountry]  =  useState()
+    const [languages,setLanguages] = useState()
+    const [currency,setCurrency] = useState()
     const [neighbouringCountries, setnNeighbouringCountries] = useState([])
 
 
@@ -84,16 +86,42 @@ export default function Home() {
             }])
     },[])
 
-    const showCountry = (country, event) => {
+    const showCountry = (countryName, event) => {
         setShowCountries(true)
-        console.log(country)
-        setCountry(country)
-        setnNeighbouringCountries()
         event.stopPropagation()
+        fillCountryPage(countryName)
     }
 
     const closeCountry = () => {
         setShowCountries(false)
+    }
+
+    const fillCountryPage = (countryName) => {
+        console.log(countryName)
+        fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+            .then(response => response.json())
+                .then(data => {
+                    console.log(data[0])
+                    setCountry(data[0])
+                    setLanguages(Object.values(data[0].languages).join(', '))
+                    for(const currencyCode in data[0].currencies) {
+                        setCurrency(data[0].currencies[currencyCode].name)
+                    }
+                    return fetch(`https://restcountries.com/v3.1/subregion/${data[0].subregion}?fields=name,flags`)
+                })
+                .then(response => response.json())
+                 .then( data => {
+                    console.log(data)
+                    setnNeighbouringCountries(data)
+                 })
+                .catch(error => {
+                console.log(error)
+        })
+    }
+
+    const changeCountryPage = (countryName, event) =>{
+        event.stopPropagation()
+        fillCountryPage(countryName)
     }
 
     useEffect(() => {
@@ -160,7 +188,7 @@ export default function Home() {
                                 countries && (
                                     countries.sort((a, b) => b.population - a.population).map((country, index) => (
                                         <div 
-                                            onClick={(event) => showCountry(country, event)} 
+                                            onClick={(event) => showCountry(country.name.common, event)} 
                                             key={index} 
                                             className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]">
                                             <img className='w-[50px] h-[38px] rounded-md' src={country.flags.png} alt={country.name.common}/>
@@ -197,31 +225,48 @@ export default function Home() {
                             <div className="flex flex-col text-[14px] w-full">
                                 <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
                                     <label>Capital</label>
-                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                    <span className="text-[#D2D5DA]">{country.capital}</span>
                                 </div>
                                 <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
                                     <label>Subregion</label>
-                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                    <span className="text-[#D2D5DA]">{country.subregion}</span>
                                 </div>
                                 <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
-                                    <label>Language</label>
-                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                    <label>Language</label>                             
+                                    {   
+                                        <span className="text-[#D2D5DA]">{languages}</span>
+                                    }                                    
                                 </div>
                                 <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
                                     <label>Currencies</label>
-                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                    <span className="text-[#D2D5DA]">{currency}</span>
                                 </div>
                                 <div className="flex p-[20px] justify-between text-[#6C727F] border-y border-y-[#282B30]">
                                     <label>Continents</label>
-                                    <span className="text-[#D2D5DA]">New Delhi</span>
+                                    <span className="text-[#D2D5DA]">{country.continents}</span>
                                 </div>
                                 <div className="flex p-[20px] flex-col text-[#6C727F] border-y border-y-[#282B30]">
                                     <label>Neighbouring Countries</label> 
+                                    <div className="flex  gap-[16px] w-full flex-wrap">
                                     {
-                     //                   neighbouringCountries && (
-                       //                     neighbouringCountries.map()
-                         //               )
-                                    }
+                                        neighbouringCountries && (
+                                            neighbouringCountries.map((country,index) => (
+                                                <div 
+                                                    key={index} className="flex flex-col gap-[8px] items-center mt-[16px]"
+                                                    onClick={(event) => changeCountryPage(country.name.common,event)}
+                                                >
+                                                    <img 
+                                                        src={country.flags.png}
+                                                        alt={country.flags.alt}
+                                                        className="h-[65px] w-[86px] rounded-md"
+                                                    ></img>
+                                                    <span className="text-[#D2D5DA] max-w-[86px] text-center">{country.name.common}</span>
+                                                </div>
+
+                                            ))
+                                        )
+                                    }  
+                                    </div>
                                 </div>
                             </div>     
                         </div>
