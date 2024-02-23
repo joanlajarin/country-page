@@ -5,3 +5,7 @@
 html,body,#root {
     font-family: "Be Vietnam Pro", sans-serif;
 }
+.bg-search-image {
+    background-image: url('Search.svg');
+
+}

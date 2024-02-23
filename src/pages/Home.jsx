@@ -10,9 +10,9 @@ export default function Home() {
     const [languages,setLanguages] = useState()
     const [currency,setCurrency] = useState()
     const [neighbouringCountries, setnNeighbouringCountries] = useState([])
-
-
     const [showCountries, setShowCountries] = useState(false)
+    const [sortFilter, setSortFilter] = useState("population")
+
     const handleKeyDown = () => {
 
     }
@@ -95,6 +95,12 @@ export default function Home() {
     const closeCountry = () => {
         setShowCountries(false)
     }
+    
+    const handleSortChange = (event) => {
+        window.alert("handleSortChange")
+        console.log(event.target.value)
+        setSortFilter(event.target.value)
+    }
 
     const fillCountryPage = (countryName) => {
         console.log(countryName)
@@ -123,6 +129,9 @@ export default function Home() {
         event.stopPropagation()
         fillCountryPage(countryName)
     }
+    const doNothing = (event) => {
+        event.stopPropagation()
+    }
 
     useEffect(() => {
         setTotalCountries(countries.length)
@@ -141,7 +150,7 @@ export default function Home() {
                         <span className="text-[#6C727F] text-[16px] font-medium">{`Found ${totalCountries} countries`}</span>
                         <input 
                             type="text"
-                            className='bg-search-image bg-no-repeat bg-[18px] pl-[50px] placeholder-[#6C727F] w-[380px] rounded-3xl py-[12px] px-[24px] bg-[#282B30] text-white'
+                            className='bg-search-image bg-no-repeat bg-[18px] pl-[50px] placeholder-[#6C727F] w-[380px] rounded-2xl py-[12px] px-[24px] bg-[#282B30] text-white'
                             placeholder='Search by Name, Region, Subregion'
                             onChange={(e) => setValueInput(e.target.value)}
                             onKeyDown={handleKeyDown}
@@ -149,10 +158,15 @@ export default function Home() {
                     </header>
                     <div className="flex gap-[32px]">
                         <section className="flex flex-col ">
-                            <div className="flex flex-col gap-[8px]">
+                            <div className="flex flex-col gap-[8px] ">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Sort by</label>
-                                <select name="" id="">
-                                    <option>Population</option>
+                                <select 
+                                    className="bg-[#1B1D1F] border border-[#282B30] text-[#D2D5DA] px-[20px] py-[10px] rounded-lg"
+                                     onChange={handleSortChange}
+                                >
+                                    <option value="population">Population</option>
+                                    <option valeu="alphabetical">Alphabetical</option>
+                                    <option value="area">Area</option>
                                 </select>
                             </div>
                             <div>
@@ -185,26 +199,40 @@ export default function Home() {
 
                             </div>
                             {
-                                countries && (
-                                    countries.sort((a, b) => b.population - a.population).map((country, index) => (
-                                        <div 
-                                            onClick={(event) => showCountry(country.name.common, event)} 
-                                            key={index} 
-                                            className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]">
-                                            <img className='w-[50px] h-[38px] rounded-md' src={country.flags.png} alt={country.name.common}/>
-                                            <h3>{country.name.common}</h3>
-                                            <span className="text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
-                                            <span className="text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>                                                                             
-                                            <span className="text-[#D2D5DA]">{country.region}</span>
-                                      </div>
-                                    )) 
-                                )
+                                countries &&
+                                sortFilter &&
+                                countries
+                                  .sort((a, b) => {
+                                    if (sortFilter === 'population' || sortFilter === 'Population') {
+                                      return b.population - a.population;
+                                    } else if (sortFilter === 'area' || sortFilter === 'Area') {
+                                      return b.area - a.area;
+                                    } else if (sortFilter === 'alphabetical' ||sortFilter === 'Alphabetical' ) {
+                                      return a.name.common.localeCompare(b.name.common);
+                                    } else {
+                                      return 0;
+                                    }
+                                  })
+                                  .map((country, index) => (
+                                    <div
+                                      onClick={(event) => showCountry(country.name.common, event)}
+                                      key={index}
+                                      className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]"
+                                    >
+                                      <img className="w-[50px] h-[38px] rounded-md" src={country.flags.png} alt={country.name.common} />
+                                      <h3>{country.name.common}</h3>
+                                      <span className="text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                      <span className="text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                      <span className="text-[#D2D5DA]">{country.region}</span>
+                                    </div>
+                                  ))
                             }
                         </section>
                     </div>
                 </section>
                 <section 
-                    className={`w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F]  rounded-xl border border-[#282B30] ${showCountries ? '' : 'hidden'}`}
+                    className={`w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] mb-[50px] rounded-xl border border-[#282B30] ${showCountries ? '' : 'hidden'}`}
+                    onClick={doNothing}        
                 >
                 {
                     country && (
