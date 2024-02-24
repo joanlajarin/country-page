@@ -6,6 +6,8 @@ export default function Home() {
     const [valueInput, setValueInput] = useState('')
     const [totalCountries, setTotalCountries] = useState(0)
     const [countries, setCountries]  =  useState([])
+    const [countriesFiltered, setCountriesFiltered]  =  useState([])
+
     const [country, setCountry]  =  useState()
     const [languages,setLanguages] = useState()
     const [currency,setCurrency] = useState()
@@ -32,7 +34,10 @@ export default function Home() {
                 console.log(error)
             })
     }
-
+    useEffect(() =>{
+        applyFiltersCheckbox()
+    },[unMemberChecked,independentChecked])
+    
     useEffect(() => {
         setCountries([
             {
@@ -91,6 +96,63 @@ export default function Home() {
               "area": 117600.0,
               "population": 5352000
             }])
+        setCountriesFiltered([
+            {
+                  "flags": {
+                    "png": "https://flagcdn.com/w320/cy.png",
+                    "svg": "https://flagcdn.com/cy.svg",
+                    "alt": "The flag of Cyprus has a white field, at the center of which is a copper-colored silhouette of the Island of Cyprus above two green olive branches crossed at the stem."
+                  },
+                  "name": {
+                    "common": "Cyprus",
+                    "official": "Republic of Cyprus",
+                    "nativeName": {
+                      "ell": {
+                        "official": "Δημοκρατία της Κύπρος",
+                        "common": "Κύπρος"
+                      },
+                      "tur": {
+                        "official": "Kıbrıs Cumhuriyeti",
+                        "common": "Kıbrıs"
+                      }
+                    }
+                  },
+                  "independent": false,
+                  "unMember": true,
+                  "region": "Europe",
+                  "area": 9251.0,
+                  "population": 1207361
+            },
+            {
+                  "flags": {
+                    "png": "https://flagcdn.com/w320/er.png",
+                    "svg": "https://flagcdn.com/er.svg",
+                    "alt": "The flag of Eritrea comprises three triangles — a large red isosceles triangle with its base spanning the hoist end and its apex at the midpoint on the fly end, and a green and blue right-angled triangle above and beneath the red triangle. On the hoist side of the red triangle is a golden vertical olive branch encircled by a golden olive wreath."
+                  },
+                  "name": {
+                    "common": "Eritrea",
+                    "official": "State of Eritrea",
+                    "nativeName": {
+                      "ara": {
+                        "official": "دولة إرتريا",
+                        "common": "إرتريا‎"
+                      },
+                      "eng": {
+                        "official": "State of Eritrea",
+                        "common": "Eritrea"
+                      },
+                      "tir": {
+                        "official": "ሃገረ ኤርትራ",
+                        "common": "ኤርትራ"
+                      }
+                    }
+                  },
+                  "independent": true,
+                  "unMember": false,
+                  "region": "Africa",
+                  "area": 117600.0,
+                  "population": 5352000
+            }])
     },[])
 
     const showCountry = (countryName, event) => {
@@ -141,8 +203,8 @@ export default function Home() {
     }
 
     useEffect(() => {
-        setTotalCountries(countries.length)
-    }, [countries])
+        setTotalCountries(countriesFiltered.length)
+    }, [countriesFiltered])
 
 
     const handleUnMemberCheckboxChange = () => {
@@ -151,6 +213,15 @@ export default function Home() {
 
     const handleIndependentCheckboxChange = () => {
         setIndependentChecked(!independentChecked)
+    }
+
+    const applyFiltersCheckbox = () => {
+
+        setCountriesFiltered(countries.filter(country => {
+            const isUnMemberMatch = !unMemberChecked || country.unMember
+            const isIndependentMatch = !independentChecked || country.independent
+            return isUnMemberMatch && isIndependentMatch
+          }))
     }
 
     return (
@@ -177,7 +248,7 @@ export default function Home() {
                             <div className="flex flex-col gap-[8px] ">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Sort by</label>
                                 <select 
-                                    className="bg-[#1B1D1F] border border-[#282B30] text-[#D2D5DA] px-[20px] py-[10px] rounded-lg"
+                                    className="bg-[#1B1D1F] border border-[#282B30] text-[#D2D5DA] text-[14px] px-[20px] py-[10px] rounded-lg"
                                      onChange={handleSortChange}
                                 >
                                     <option value="population">Population</option>
@@ -185,15 +256,30 @@ export default function Home() {
                                     <option value="area">Area</option>
                                 </select>
                             </div>
-                            <div>
+                            <div className="flex flex-col gap-[8px] mt-[32px]">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Region</label>
-                                <div className="flex flex-wrap">
-                                    <div className="bg-[#282B30]">
-                                        <span className="text-[#D2D5DA]">Americas</span>
+                                <div className="flex flex-wrap gap-[10px]">
+                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
+                                        <span className="text-[#D2D5DA] text-[14px]">Americas</span>
+                                    </div>
+                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
+                                        <span className="text-[#D2D5DA] text-[14px]">Antarctic</span>
+                                    </div>
+                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
+                                        <span className="text-[#D2D5DA] text-[14px]">Africa</span>
+                                    </div>
+                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
+                                        <span className="text-[#D2D5DA] text-[14px]">Asia</span>
+                                    </div>
+                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
+                                        <span className="text-[#D2D5DA] text-[14px]">Europe</span>
+                                    </div>
+                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
+                                        <span className="text-[#D2D5DA] text-[14px]">Oceania</span>
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-[8px]">
+                            <div className="flex flex-col gap-[8px] mt-[32px]">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Status</label>
                                     <div className="flex items-center gap-[10px]">
                                         <input 
@@ -235,9 +321,9 @@ export default function Home() {
 
                             </div>
                             {
-                                countries &&
+                                countriesFiltered &&
                                 sortFilter &&
-                                countries
+                                countriesFiltered
                                   .sort((a, b) => {
                                     if (sortFilter === 'population' || sortFilter === 'Population') {
                                       return b.population - a.population;
@@ -248,11 +334,6 @@ export default function Home() {
                                     } else {
                                       return 0;
                                     }
-                                  })
-                                  .filter(country => {
-                                    const isUnMemberMatch = !unMemberChecked || country.unMember
-                                    const isIndependentMatch = !independentChecked || country.independent
-                                    return isUnMemberMatch && isIndependentMatch
                                   })
                                   .map((country, index) => (
                                     <div
