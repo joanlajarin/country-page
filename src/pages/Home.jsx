@@ -25,141 +25,44 @@ export default function Home() {
     const [isOceania, setIsOceania] = useState(true)
 
 
-    const handleKeyDown = () => {
-
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            //reset filters
+            setUnMemberChecked(false)
+            setIndependentChecked(false)
+            setIsAmericas(true)
+            setIsAntartic(true)
+            setIsAfrica(true)
+            setIsAsia(true)
+            setIsEurope(true)
+            setIsOceania(true)
+            valueInput.trim() === "" ? setCountriesFiltered(countries) : (
+                setCountriesFiltered(countries.filter( country => {
+                    const found =   (country.name.common?.includes(valueInput.trim())) ||
+                                    (country.region?.includes(valueInput.trim())) ||
+                                    (country.subregion?.includes(valueInput.trim())) 
+                    return found 
+                })) 
+            )
+        }
     }
 
-    const getCountries = () => {
 
-        fetch('https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,unMember,independent')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
     useEffect(() =>{
         applyFiltersCheckbox()
     },[unMemberChecked,independentChecked, isAmericas, isAntartic, isAfrica, isAsia, isEurope, isOceania])
     
     useEffect(() => {
-        setCountries([
-            {
-              "flags": {
-                "png": "https://flagcdn.com/w320/cy.png",
-                "svg": "https://flagcdn.com/cy.svg",
-                "alt": "The flag of Cyprus has a white field, at the center of which is a copper-colored silhouette of the Island of Cyprus above two green olive branches crossed at the stem."
-              },
-              "name": {
-                "common": "Cyprus",
-                "official": "Republic of Cyprus",
-                "nativeName": {
-                  "ell": {
-                    "official": "Δημοκρατία της Κύπρος",
-                    "common": "Κύπρος"
-                  },
-                  "tur": {
-                    "official": "Kıbrıs Cumhuriyeti",
-                    "common": "Kıbrıs"
-                  }
-                }
-              },
-              "independent": false,
-              "unMember": true,
-              "region": "Europe",
-              "area": 9251.0,
-              "population": 1207361
-            },
-            {
-              "flags": {
-                "png": "https://flagcdn.com/w320/er.png",
-                "svg": "https://flagcdn.com/er.svg",
-                "alt": "The flag of Eritrea comprises three triangles — a large red isosceles triangle with its base spanning the hoist end and its apex at the midpoint on the fly end, and a green and blue right-angled triangle above and beneath the red triangle. On the hoist side of the red triangle is a golden vertical olive branch encircled by a golden olive wreath."
-              },
-              "name": {
-                "common": "Eritrea",
-                "official": "State of Eritrea",
-                "nativeName": {
-                  "ara": {
-                    "official": "دولة إرتريا",
-                    "common": "إرتريا‎"
-                  },
-                  "eng": {
-                    "official": "State of Eritrea",
-                    "common": "Eritrea"
-                  },
-                  "tir": {
-                    "official": "ሃገረ ኤርትራ",
-                    "common": "ኤርትራ"
-                  }
-                }
-              },
-              "independent": true,
-              "unMember": false,
-              "region": "Africa",
-              "area": 117600.0,
-              "population": 5352000
-            }])
-        setCountriesFiltered([
-            {
-                  "flags": {
-                    "png": "https://flagcdn.com/w320/cy.png",
-                    "svg": "https://flagcdn.com/cy.svg",
-                    "alt": "The flag of Cyprus has a white field, at the center of which is a copper-colored silhouette of the Island of Cyprus above two green olive branches crossed at the stem."
-                  },
-                  "name": {
-                    "common": "Cyprus",
-                    "official": "Republic of Cyprus",
-                    "nativeName": {
-                      "ell": {
-                        "official": "Δημοκρατία της Κύπρος",
-                        "common": "Κύπρος"
-                      },
-                      "tur": {
-                        "official": "Kıbrıs Cumhuriyeti",
-                        "common": "Kıbrıs"
-                      }
-                    }
-                  },
-                  "independent": false,
-                  "unMember": true,
-                  "region": "Europe",
-                  "area": 9251.0,
-                  "population": 1207361
-            },
-            {
-                  "flags": {
-                    "png": "https://flagcdn.com/w320/er.png",
-                    "svg": "https://flagcdn.com/er.svg",
-                    "alt": "The flag of Eritrea comprises three triangles — a large red isosceles triangle with its base spanning the hoist end and its apex at the midpoint on the fly end, and a green and blue right-angled triangle above and beneath the red triangle. On the hoist side of the red triangle is a golden vertical olive branch encircled by a golden olive wreath."
-                  },
-                  "name": {
-                    "common": "Eritrea",
-                    "official": "State of Eritrea",
-                    "nativeName": {
-                      "ara": {
-                        "official": "دولة إرتريا",
-                        "common": "إرتريا‎"
-                      },
-                      "eng": {
-                        "official": "State of Eritrea",
-                        "common": "Eritrea"
-                      },
-                      "tir": {
-                        "official": "ሃገረ ኤርትራ",
-                        "common": "ኤርትራ"
-                      }
-                    }
-                  },
-                  "independent": true,
-                  "unMember": false,
-                  "region": "Africa",
-                  "area": 117600.0,
-                  "population": 5352000
-            }])
+        fetch('https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,unMember,independent')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            setCountries(data)
+            setCountriesFiltered(data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
     },[])
 
     const showCountry = (countryName, event) => {
