@@ -12,6 +12,9 @@ export default function Home() {
     const [neighbouringCountries, setnNeighbouringCountries] = useState([])
     const [showCountries, setShowCountries] = useState(false)
     const [sortFilter, setSortFilter] = useState("population")
+    const [unMemberChecked, setUnMemberChecked] = useState(false)
+    const [independentChecked, setIndependentChecked] = useState(false)
+
 
     const handleKeyDown = () => {
 
@@ -19,7 +22,7 @@ export default function Home() {
 
     const getCountries = () => {
 
-        fetch('https://restcountries.com/v3.1/all?fields=name,flags,population,area,region')
+        fetch('https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,unMember,independent')
             .then(response => response.json())
             .then(data => {
                 console.log(data)
@@ -52,6 +55,8 @@ export default function Home() {
                   }
                 }
               },
+              "independent": false,
+              "unMember": true,
               "region": "Europe",
               "area": 9251.0,
               "population": 1207361
@@ -80,6 +85,8 @@ export default function Home() {
                   }
                 }
               },
+              "independent": true,
+              "unMember": false,
               "region": "Africa",
               "area": 117600.0,
               "population": 5352000
@@ -137,6 +144,15 @@ export default function Home() {
         setTotalCountries(countries.length)
     }, [countries])
 
+
+    const handleUnMemberCheckboxChange = () => {
+        setUnMemberChecked(!unMemberChecked)
+    }
+
+    const handleIndependentCheckboxChange = () => {
+        setIndependentChecked(!independentChecked)
+    }
+
     return (
         <section 
             className="h-screen flex flex-col"
@@ -177,16 +193,36 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col gap-[8px]">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Status</label>
-                                <label className="text-[#D2D5DA]">
-                                    <input type="checkbox" id="cbox1" value="first_checkbox" /> 
-                                    Member of the United Nations
-                                </label>
-                                <label className="text-[#D2D5DA]">
-                                    <input type="checkbox" id="cbox2" value="first_checkbox" /> 
-                                    Independent
-                                </label>
+                                    <div className="flex items-center gap-[10px]">
+                                        <input 
+                                            type="checkbox" 
+                                            id="cbox1" 
+                                            value="first_checkbox" 
+                                            className={`checkbox-input appearance-none size-[23px] bg-[#1B1D1F] rounded border-[2px] border-[#6C727F] checked:bg-[#4E80EE] checked:border-[#4E80EE] ${unMemberChecked ? "bg-[url('Done_round.svg')]": ""}`}
+                                            checked={unMemberChecked}
+                                            onChange={handleUnMemberCheckboxChange}
+                                        /> 
+                                        <label 
+                                            className="text-[#D2D5DA]  text-[14px] whitespace-nowrap"
+                                        > Member of the United Nations
+                                        </label> 
+                                    </div>
+                                    <div className="flex items-center gap-[10px]">
+                                        <input 
+                                            type="checkbox" 
+                                            id="cbox2" 
+                                            value="second_checkbox" 
+                                            className={`checkbox-input appearance-none size-[23px] bg-[#1B1D1F] rounded border-[2px] border-[#6C727F] checked:bg-[#4E80EE] checked:border-[#4E80EE] ${independentChecked ? "bg-[url('Done_round.svg')]": ""}`}
+                                            checked={independentChecked}
+                                            onChange={handleIndependentCheckboxChange}
+                                        /> 
+                                        <label 
+                                            className="text-[#D2D5DA]  text-[14px] whitespace-nowrap"
+                                        > Independent
+                                        </label> 
+                                    </div>
                             </div>
                         </section>
                         <section className="flex-1 bg-[#1B1D1F]">
@@ -213,19 +249,24 @@ export default function Home() {
                                       return 0;
                                     }
                                   })
+                                  .filter(country => {
+                                    const isUnMemberMatch = !unMemberChecked || country.unMember
+                                    const isIndependentMatch = !independentChecked || country.independent
+                                    return isUnMemberMatch && isIndependentMatch
+                                  })
                                   .map((country, index) => (
                                     <div
-                                      onClick={(event) => showCountry(country.name.common, event)}
-                                      key={index}
-                                      className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]"
-                                    >
-                                      <img className="w-[50px] h-[38px] rounded-md" src={country.flags.png} alt={country.name.common} />
-                                      <h3>{country.name.common}</h3>
-                                      <span className="text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
-                                      <span className="text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
-                                      <span className="text-[#D2D5DA]">{country.region}</span>
-                                    </div>
-                                  ))
+                                    onClick={(event) => showCountry(country.name.common, event)}
+                                    key={index}
+                                    className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]"
+                                  >
+                                    <img className="w-[50px] h-[38px] rounded-md" src={country.flags.png} alt={country.name.common} />
+                                    <h3>{country.name.common}</h3>
+                                    <span className="text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                    <span className="text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                    <span className="text-[#D2D5DA]">{country.region}</span>
+                                  </div>
+                                ))
                             }
                         </section>
                     </div>

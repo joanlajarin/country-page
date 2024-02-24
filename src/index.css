@@ -9,3 +9,14 @@ html,body,#root {
     background-image: url('Search.svg');
 
 }
+
+
+  
+  .checkbox-input:checked + .checkbox-label::after {
+    background-color: blue; /* Change to your desired background color */
+    content: '\2713'; /* Checkmark symbol */
+    display: block;
+    text-align: center;
+    line-height: 15px;
+    color: white; /* Color of the checkmark */
+  }
