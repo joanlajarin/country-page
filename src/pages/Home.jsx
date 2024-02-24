@@ -14,8 +14,15 @@ export default function Home() {
     const [neighbouringCountries, setnNeighbouringCountries] = useState([])
     const [showCountries, setShowCountries] = useState(false)
     const [sortFilter, setSortFilter] = useState("population")
+    //Filters
     const [unMemberChecked, setUnMemberChecked] = useState(false)
     const [independentChecked, setIndependentChecked] = useState(false)
+    const [isAmericas, setIsAmericas] = useState(true)
+    const [isAntartic, setIsAntartic] = useState(true)
+    const [isAfrica, setIsAfrica] = useState(true)
+    const [isAsia, setIsAsia] = useState(true)
+    const [isEurope, setIsEurope] = useState(true)
+    const [isOceania, setIsOceania] = useState(true)
 
 
     const handleKeyDown = () => {
@@ -36,7 +43,7 @@ export default function Home() {
     }
     useEffect(() =>{
         applyFiltersCheckbox()
-    },[unMemberChecked,independentChecked])
+    },[unMemberChecked,independentChecked, isAmericas, isAntartic, isAfrica, isAsia, isEurope, isOceania])
     
     useEffect(() => {
         setCountries([
@@ -215,12 +222,37 @@ export default function Home() {
         setIndependentChecked(!independentChecked)
     }
 
+    const handleFilterAmericas = () => {
+        setIsAmericas(!isAmericas)
+    }
+    const handleFilterAntartic = () => {
+        setIsAntartic(!isAntartic)
+    }
+    const handleFilterAfrica = () => {
+        setIsAfrica(!isAfrica)
+    }
+    const handleFilterAsia = () => {
+        setIsAsia(!isAsia)
+    }
+    const handleFilterEurope = () => {
+        setIsEurope(!isEurope)
+    }
+    const handleFilterOceania = () => {
+        setIsOceania(!isOceania)
+    }
+
     const applyFiltersCheckbox = () => {
 
         setCountriesFiltered(countries.filter(country => {
             const isUnMemberMatch = !unMemberChecked || country.unMember
             const isIndependentMatch = !independentChecked || country.independent
-            return isUnMemberMatch && isIndependentMatch
+            const isRegion =    (isAmericas && country.region === "Americas") ||
+                                (isAntartic && country.region === "Antartic") ||
+                                (isAfrica && country.region === "Africa") ||
+                                (isAsia && country.region === "Asia") ||
+                                (isEurope && country.region === "Europe") ||
+                                (isOceania && country.region === "Oceania")  
+            return isUnMemberMatch && isIndependentMatch && isRegion
           }))
     }
 
@@ -259,23 +291,41 @@ export default function Home() {
                             <div className="flex flex-col gap-[8px] mt-[32px]">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Region</label>
                                 <div className="flex flex-wrap gap-[10px]">
-                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
-                                        <span className="text-[#D2D5DA] text-[14px]">Americas</span>
+                                     <div 
+                                        className={`px-[10px] py-[5px] rounded-lg ${isAmericas ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterAmericas}
+                                    >
+                                        <span className="text-[14px]">Americas</span>
                                     </div>
-                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
-                                        <span className="text-[#D2D5DA] text-[14px]">Antarctic</span>
+                                    <div 
+                                        className={`px-[10px] py-[5px] rounded-lg ${isAntartic ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterAntartic}
+                                    >
+                                    <span className="text-[14px]">Antartic</span>
                                     </div>
-                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
-                                        <span className="text-[#D2D5DA] text-[14px]">Africa</span>
+                                    <div 
+                                        className={`px-[10px] py-[5px] rounded-lg ${isAfrica ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterAfrica}
+                                    >
+                                        <span className="text-[14px]">Africa</span>
                                     </div>
-                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
-                                        <span className="text-[#D2D5DA] text-[14px]">Asia</span>
+                                    <div 
+                                        className={`px-[10px] py-[5px] rounded-lg ${isAsia ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterAsia}
+                                    >
+                                        <span className="text-[14px]">Asia</span>
                                     </div>
-                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
-                                        <span className="text-[#D2D5DA] text-[14px]">Europe</span>
+                                    <div 
+                                        className={`px-[10px] py-[5px] rounded-lg ${isEurope ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterEurope}
+                                    >
+                                        <span className="text-[14px]">Europe</span>
                                     </div>
-                                    <div className="bg-[#282B30] px-[10px] py-[5px] rounded-lg">
-                                        <span className="text-[#D2D5DA] text-[14px]">Oceania</span>
+                                    <div 
+                                        className={`px-[10px] py-[5px] rounded-lg ${isOceania ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterOceania}
+                                    >
+                                        <span className="text-[14px]">Oceania</span>
                                     </div>
                                 </div>
                             </div>
