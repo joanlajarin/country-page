@@ -20,3 +20,10 @@ html,body,#root {
     line-height: 15px;
     color: white; /* Color of the checkmark */
   }
+
+  .fixed-width-grid {
+    display: grid;
+    grid-template-columns: 50px 150px 1fr 1fr 1fr;
+    gap: 60px; 
+
+  }

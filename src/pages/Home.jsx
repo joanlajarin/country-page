@@ -1,6 +1,8 @@
 import { useEffect } from "react"
 import Header from "../components/Header"
 import { useState } from "react"
+import ButtonLeftImg from '../images/Button_left.svg'
+import ButtonRightImg from '../images/Button_right.svg'
 
 export default function Home() {
     const [valueInput, setValueInput] = useState('')
@@ -24,10 +26,12 @@ export default function Home() {
     const [isEurope, setIsEurope] = useState(true)
     const [isOceania, setIsOceania] = useState(true)
 
+    const [positionNumbers, setPositionNumbers] = useState("")
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             //reset filters
+            setResetPosition(!position)
             setUnMemberChecked(false)
             setIndependentChecked(false)
             setIsAmericas(true)
@@ -38,9 +42,11 @@ export default function Home() {
             setIsOceania(true)
             valueInput.trim() === "" ? setCountriesFiltered(countries) : (
                 setCountriesFiltered(countries.filter( country => {
-                    const found =   (country.name.common?.includes(valueInput.trim())) ||
-                                    (country.region?.includes(valueInput.trim())) ||
-                                    (country.subregion?.includes(valueInput.trim())) 
+
+                    const searchValue = valueInput.trim().toLowerCase()
+                    const found =   (country.name.common?.toLowerCase().includes(searchValue)) ||
+                                    (country.region?.toLowerCase().includes(searchValue)) ||
+                                    (country.subregion?.toLowerCase().includes(searchValue)) 
                     return found 
                 })) 
             )
@@ -76,8 +82,6 @@ export default function Home() {
     }
     
     const handleSortChange = (event) => {
-        window.alert("handleSortChange")
-        console.log(event.target.value)
         setSortFilter(event.target.value)
     }
 
@@ -146,6 +150,7 @@ export default function Home() {
 
     const applyFiltersCheckbox = () => {
 
+        setResetPosition(!resetPosition)
         setCountriesFiltered(countries.filter(country => {
             const isUnMemberMatch = !unMemberChecked || country.unMember
             const isIndependentMatch = !independentChecked || country.independent
@@ -158,18 +163,52 @@ export default function Home() {
             return isUnMemberMatch && isIndependentMatch && isRegion
           }))
     }
+    const totalPosition = Math.ceil(countriesFiltered.length/10)
 
+    const [position, setPosition] = useState(0)
+    const [resetPosition, setResetPosition] = useState(false)
+
+    useEffect(() => {
+        if(totalPosition > 4) {
+            let numbers = []
+            for(let i = 1; i < totalPosition + 1; i++) {
+                numbers.push(i)
+            }
+            setPositionNumbers(numbers)
+        }
+    },[totalPosition])
+    const showNextCategories = () => {
+        const newPos = position + 1
+
+        if (newPos < totalPosition ) {
+            setPosition(newPos)
+        }
+    }
+    const showPrevCategories = () => {
+        const newPos = position - 1
+
+        if (newPos > -1 ) {
+            setPosition(newPos)
+        }
+    }
+    const handlePosition = (event) => {
+        const value = parseInt(event.target.innerHTML)
+        setPosition(value - 1)
+    }
+    useEffect(() => {
+        setPosition(0)
+    },[resetPosition])
     return (
         <section 
             className="h-screen flex flex-col"
             onClick={closeCountry}
         >
             <Header/>
-            <main className="flex-1 relative bg-[#040404] ">
+            <main className="flex-1 relative bg-[#181819] h-fit ">
                 <section 
                     className={`w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] py-[24px] px-[32px] rounded-xl border border-[#282B30] ${showCountries ? 'hidden' : '' }`}>
                     <header className="flex justify-between items-center text-center	">
-                        <span className="text-[#6C727F] text-[16px] font-medium">{`Found ${totalCountries} countries`}</span>
+                        <span className="text-[#6C727F] text-[18px] font-medium">{`Found ${totalCountries} countries`}</span>
                         <input 
                             type="text"
                             className='bg-search-image bg-no-repeat bg-[18px] pl-[50px] placeholder-[#6C727F] w-[380px] rounded-2xl py-[12px] px-[24px] bg-[#282B30] text-white'
@@ -265,7 +304,7 @@ export default function Home() {
                             </div>
                         </section>
                         <section className="flex-1 bg-[#1B1D1F]">
-                            <div className="text-[12px] grid grid-cols-5 gap-[24px] pb-[16px] text-[#6C727F] border-b border-[#6C727F] w-[600px]">
+                            <div className="text-[12px] fixed-width-grid pb-[16px] text-[#6C727F] border-b border-[#6C727F] w-[800px]">
                                 <div className="col-span-1">Flag</div>
                                 <div className="col-span-1">Name</div>
                                 <div className="col-span-1">Population</div>
@@ -279,29 +318,61 @@ export default function Home() {
                                 countriesFiltered
                                   .sort((a, b) => {
                                     if (sortFilter === 'population' || sortFilter === 'Population') {
-                                      return b.population - a.population;
+                                      return b.population - a.population
                                     } else if (sortFilter === 'area' || sortFilter === 'Area') {
-                                      return b.area - a.area;
+                                      return b.area - a.area
                                     } else if (sortFilter === 'alphabetical' ||sortFilter === 'Alphabetical' ) {
-                                      return a.name.common.localeCompare(b.name.common);
+                                      return a.name.common.localeCompare(b.name.common)
                                     } else {
-                                      return 0;
+                                      return 0
                                     }
                                   })
+                                  .slice(position * 10, position * 10 + 10)
                                   .map((country, index) => (
                                     <div
                                     onClick={(event) => showCountry(country.name.common, event)}
                                     key={index}
-                                    className="grid grid-cols-5 gap-[24px] pt-[16px] text-[#D2D5DA] w-[600px]"
+                                    className="fixed-width-grid pt-[16px] text-[#D2D5DA]"
                                   >
-                                    <img className="w-[50px] h-[38px] rounded-md" src={country.flags.png} alt={country.name.common} />
-                                    <h3>{country.name.common}</h3>
-                                    <span className="text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
-                                    <span className="text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
-                                    <span className="text-[#D2D5DA]">{country.region}</span>
+                                    <img className="col-auto w-[50px] h-[38px] rounded-md" src={country.flags.png} alt={country.name.common} />
+                                    <h3 className="col-auto">{country.name.common}</h3>
+                                    <span className="col-auto text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                    <span className="col-auto text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                    <span className="col-auto text-[#D2D5DA]">{country.region}</span>
                                   </div>
                                 ))
                             }
+                            <div className="flex justify-end mb-[40px] w-full items-center gap-[px]">
+                                <span className="text-[#6C727F] text-[12px]">{`${totalCountries > 1 ? position * 10 + 1 : 0} to ${position * 10 + 10 > totalCountries ? totalCountries : position * 10 + 10} of ${totalCountries} countries`}</span>
+                                <button>
+                                    <img 
+                                        onClick={showPrevCategories} 
+                                        src={ButtonLeftImg}
+                                        className={`size-[15px] ${position === 0 ? "opacity-0" : "opacity-100"}`}
+                                    ></img>
+                                </button>
+                                <div className="flex gap-[5px] items-center">
+                                {
+                                    positionNumbers && (
+                                        positionNumbers.map( position => (
+                                            <span 
+                                                className="text-[#6C727F] text-[12px]"
+                                                value={position}
+                                                onClick={handlePosition}
+                                            >{position}
+                                            </span>
+                                        ))
+                                    )
+                                }
+                                </div>
+                                <button>
+                                    <img 
+                                        onClick={showNextCategories} 
+                                        src={ButtonRightImg}
+                                        className={`size-[15px] ${position === totalPosition - 1? "opacity-0" : "opacity-100"}`}
+                                    ></img>
+                                </button>
+                            </div>
                         </section>
                     </div>
                 </section>
