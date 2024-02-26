@@ -217,7 +217,7 @@ export default function Home() {
                             onKeyDown={handleKeyDown}
                         />
                     </header>
-                    <div className="flex gap-[32px]">
+                    <div className="flex lg:flex-row flex-col gap-[32px]">
                         <section className="flex flex-col ">
                             <div className="flex flex-col gap-[8px] ">
                                 <label className="text-[#6C727F] font-semibold text-[12px]">Sort by</label>
@@ -304,12 +304,12 @@ export default function Home() {
                             </div>
                         </section>
                         <section className="flex-1 bg-[#1B1D1F]">
-                            <div className="text-[12px] fixed-width-grid pb-[16px] text-[#6C727F] border-b border-[#6C727F] w-[800px]">
+                            <div className="text-[12px] fixed-width-grid  pb-[16px] text-[#6C727F] border-b border-[#6C727F]">
                                 <div className="col-span-1">Flag</div>
                                 <div className="col-span-1">Name</div>
                                 <div className="col-span-1">Population</div>
                                 <div className="col-span-1">Area(km<sup>2</sup>)</div>
-                                <div className="col-span-1">Region</div>
+                                <div className="hidden xl:flex xl:col-span-1">Region</div>
 
                             </div>
                             {
@@ -338,12 +338,13 @@ export default function Home() {
                                     <h3 className="col-auto">{country.name.common}</h3>
                                     <span className="col-auto text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
                                     <span className="col-auto text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
-                                    <span className="col-auto text-[#D2D5DA]">{country.region}</span>
+                                    <span className="hidden xl:flex xl:col-auto xl:text-[#D2D5DA]">{country.region}</span>
                                   </div>
                                 ))
                             }
-                            <div className="flex justify-end mb-[40px] w-full items-center gap-[px]">
+                            <div className="flex justify-between mt-[20px] mb-[40px] w-full items-center">
                                 <span className="text-[#6C727F] text-[12px]">{`${totalCountries > 1 ? position * 10 + 1 : 0} to ${position * 10 + 10 > totalCountries ? totalCountries : position * 10 + 10} of ${totalCountries} countries`}</span>
+                                <div className="flex items-center text-center gap-[5px]">
                                 <button>
                                     <img 
                                         onClick={showPrevCategories} 
@@ -356,7 +357,7 @@ export default function Home() {
                                     positionNumbers && (
                                         positionNumbers.map( position => (
                                             <span 
-                                                className="text-[#6C727F] text-[12px]"
+                                                className="text-[#6C727F] text-[12px] flex items-center"
                                                 value={position}
                                                 onClick={handlePosition}
                                             >{position}
@@ -372,6 +373,7 @@ export default function Home() {
                                         className={`size-[15px] ${position === totalPosition - 1? "opacity-0" : "opacity-100"}`}
                                     ></img>
                                 </button>
+                                </div>
                             </div>
                         </section>
                     </div>

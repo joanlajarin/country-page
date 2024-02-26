@@ -4,6 +4,8 @@
 
 html,body,#root {
     font-family: "Be Vietnam Pro", sans-serif;
+    height: 100%;
+    background-color: #181819;
 }
 .bg-search-image {
     background-image: url('Search.svg');
@@ -23,7 +25,20 @@ html,body,#root {
 
   .fixed-width-grid {
     display: grid;
-    grid-template-columns: 50px 150px 1fr 1fr 1fr;
-    gap: 60px; 
-
+    grid-template-columns: 50px 120px 100px 60px;
+    gap: 30px; 
   }
+
+  @media (min-width: 700px) {
+    .fixed-width-grid {
+      grid-template-columns: 50px 150px 120px 100px;
+      gap: 60px; 
+
+    }
+  }
+@media (min-width: 1280px) {
+  .fixed-width-grid {
+    grid-template-columns: 50px 150px 120px 100px 100px;
+    gap: 60px; 
+  }
+}
