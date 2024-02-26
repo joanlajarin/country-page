@@ -30,16 +30,6 @@ export default function Home() {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            //reset filters
-            setResetPosition(!position)
-            setUnMemberChecked(false)
-            setIndependentChecked(false)
-            setIsAmericas(true)
-            setIsAntartic(true)
-            setIsAfrica(true)
-            setIsAsia(true)
-            setIsEurope(true)
-            setIsOceania(true)
             valueInput.trim() === "" ? setCountriesFiltered(countries) : (
                 setCountriesFiltered(countries.filter( country => {
 
@@ -150,8 +140,8 @@ export default function Home() {
 
     const applyFiltersCheckbox = () => {
 
-        setResetPosition(!resetPosition)
-        setCountriesFiltered(countries.filter(country => {
+            setResetPosition(!resetPosition)
+            setCountriesFiltered(countries.filter(country => {
             const isUnMemberMatch = !unMemberChecked || country.unMember
             const isIndependentMatch = !independentChecked || country.independent
             const isRegion =    (isAmericas && country.region === "Americas") ||
@@ -175,6 +165,8 @@ export default function Home() {
                 numbers.push(i)
             }
             setPositionNumbers(numbers)
+        } else {
+            setPositionNumbers(0)
         }
     },[totalPosition])
     const showNextCategories = () => {
