@@ -200,21 +200,21 @@ export default function Home() {
                 <section 
                     className={`w-fit absolute  flex flex-col gap-[36px] left-1/2 -translate-x-1/2 top-[-70px] bg-[#1B1D1F] py-[24px] px-[32px] rounded-xl border border-[#282B30] ${showCountries ? 'hidden' : '' }`}>
                     <header className="flex justify-between items-center text-center	">
-                        <span className="text-[#6C727F] text-[18px] font-medium">{`Found ${totalCountries} countries`}</span>
+                        <span className="text-[#6C727F] text-[16px] font-semibold ">{`Found ${totalCountries} countries`}</span>
                         <input 
                             type="text"
-                            className='bg-search-image bg-no-repeat bg-[18px] pl-[50px] placeholder-[#6C727F] w-[380px] rounded-2xl py-[12px] px-[24px] bg-[#282B30] text-white'
+                            className='bg-search-image bg-no-repeat bg-[18px] pl-[50px] placeholder-[#6C727F] w-[380px] rounded-2xl py-[12px] px-[24px] bg-[#282B30] text-white text-[14px] font-semibold'
                             placeholder='Search by Name, Region, Subregion'
                             onChange={(e) => setValueInput(e.target.value)}
                             onKeyDown={handleKeyDown}
                         />
                     </header>
                     <div className="flex lg:flex-row flex-col gap-[32px]">
-                        <section className="flex flex-col ">
-                            <div className="flex flex-col gap-[8px] ">
-                                <label className="text-[#6C727F] font-semibold text-[12px]">Sort by</label>
+                        <section className="flex flex-col lg:w-[200px] xl:w-[240px] ">
+                            <div className="flex flex-col gap-[8px] lg:w-[200px] xl:w-[240px] ">
+                                <label className="text-[#6C727F] font-semibold text-[12px] lg:w-[200px] xl:w-[240px]">Sort by</label>
                                 <select 
-                                    className="bg-[#1B1D1F] border border-[#282B30] text-[#D2D5DA] text-[14px] px-[20px] py-[10px] rounded-lg"
+                                    className="lg:w-[200px] xl:w-[240px] bg-[#1B1D1F] border border-[#282B30] text-[#D2D5DA] font-semibold text-[14px] px-[20px] py-[10px] rounded-lg"
                                      onChange={handleSortChange}
                                 >
                                     <option value="population">Population</option>
@@ -222,44 +222,44 @@ export default function Home() {
                                     <option value="area">Area</option>
                                 </select>
                             </div>
-                            <div className="flex flex-col gap-[8px] mt-[32px]">
-                                <label className="text-[#6C727F] font-semibold text-[12px]">Region</label>
-                                <div className="flex flex-wrap gap-[10px]">
+                            <div className="flex flex-col gap-[8px] mt-[32px] lg:w-[200px] xl:w-[240px]">
+                                <label className="text-[#6C727F] font-semibold text-[12px] lg:w-[200px] xl:w-[240px]">Region</label>
+                                <div className="flex flex-wrap gap-[10px] lg:w-[200px] xl:w-[240px]">
                                      <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isAmericas ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
                                         onClick={handleFilterAmericas}
                                     >
-                                        <span className="text-[14px]">Americas</span>
+                                        <span className="text-[14px] font-semibold">Americas</span>
                                     </div>
                                     <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isAntartic ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
                                         onClick={handleFilterAntartic}
                                     >
-                                    <span className="text-[14px]">Antartic</span>
+                                    <span className="text-[14px] font-semibold">Antartic</span>
                                     </div>
                                     <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isAfrica ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
                                         onClick={handleFilterAfrica}
                                     >
-                                        <span className="text-[14px]">Africa</span>
+                                        <span className="text-[14px] font-semibold">Africa</span>
                                     </div>
                                     <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isAsia ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
                                         onClick={handleFilterAsia}
                                     >
-                                        <span className="text-[14px]">Asia</span>
+                                        <span className="text-[14px] font-semibold">Asia</span>
                                     </div>
                                     <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isEurope ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
                                         onClick={handleFilterEurope}
                                     >
-                                        <span className="text-[14px]">Europe</span>
+                                        <span className="text-[14px] font-semibold">Europe</span>
                                     </div>
                                     <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isOceania ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
                                         onClick={handleFilterOceania}
                                     >
-                                        <span className="text-[14px]">Oceania</span>
+                                        <span className="text-[14px] font-semibold">Oceania</span>
                                     </div>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@ export default function Home() {
                                             onChange={handleUnMemberCheckboxChange}
                                         /> 
                                         <label 
-                                            className="text-[#D2D5DA]  text-[14px] whitespace-nowrap"
+                                            className="lg:w-[200px]  xl:w-[240px] text-[#D2D5DA]  text-[14px] font-semibold"
                                         > Member of the United Nations
                                         </label> 
                                     </div>
@@ -289,7 +289,7 @@ export default function Home() {
                                             onChange={handleIndependentCheckboxChange}
                                         /> 
                                         <label 
-                                            className="text-[#D2D5DA]  text-[14px] whitespace-nowrap"
+                                            className="text-[#D2D5DA]  text-[14px] whitespace-nowrap font-semibold"
                                         > Independent
                                         </label> 
                                     </div>
@@ -324,11 +324,11 @@ export default function Home() {
                                     <div
                                     onClick={(event) => showCountry(country.name.common, event)}
                                     key={index}
-                                    className="fixed-width-grid pt-[16px] text-[#D2D5DA]"
+                                    className="fixed-width-grid pt-[16px] text-[#D2D5DA] text-[14px] font-semibold"
                                   >
                                     <img className="col-auto w-[50px] h-[38px] rounded-md" src={country.flags.png} alt={country.name.common} />
                                     <h3 className="col-auto">{country.name.common}</h3>
-                                    <span className="col-auto text-[#D2D5DA]">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                                    <span className="col-auto text-[#D2D5DA] ">{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
                                     <span className="col-auto text-[#D2D5DA]">{country.area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
                                     <span className="hidden xl:flex xl:col-auto xl:text-[#D2D5DA]">{country.region}</span>
                                   </div>
