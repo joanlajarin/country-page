@@ -20,7 +20,7 @@ export default function Home() {
     const [unMemberChecked, setUnMemberChecked] = useState(false)
     const [independentChecked, setIndependentChecked] = useState(false)
     const [isAmericas, setIsAmericas] = useState(true)
-    const [isAntartic, setIsAntartic] = useState(true)
+    const [isAntarctic, setIsAntarctic] = useState(true)
     const [isAfrica, setIsAfrica] = useState(true)
     const [isAsia, setIsAsia] = useState(true)
     const [isEurope, setIsEurope] = useState(true)
@@ -46,7 +46,7 @@ export default function Home() {
 
     useEffect(() =>{
         applyFiltersCheckbox()
-    },[unMemberChecked,independentChecked, isAmericas, isAntartic, isAfrica, isAsia, isEurope, isOceania])
+    },[unMemberChecked,independentChecked, isAmericas, isAntarctic, isAfrica, isAsia, isEurope, isOceania])
     
     useEffect(() => {
         fetch('https://restcountries.com/v3.1/all?fields=name,flags,population,area,region,unMember,independent')
@@ -122,8 +122,8 @@ export default function Home() {
     const handleFilterAmericas = () => {
         setIsAmericas(!isAmericas)
     }
-    const handleFilterAntartic = () => {
-        setIsAntartic(!isAntartic)
+    const handleFilterAntarctic = () => {
+        setIsAntarctic(!isAntarctic)
     }
     const handleFilterAfrica = () => {
         setIsAfrica(!isAfrica)
@@ -145,7 +145,7 @@ export default function Home() {
             const isUnMemberMatch = !unMemberChecked || country.unMember
             const isIndependentMatch = !independentChecked || country.independent
             const isRegion =    (isAmericas && country.region === "Americas") ||
-                                (isAntartic && country.region === "Antartic") ||
+                                (isAntarctic && country.region === "Antarctic") ||
                                 (isAfrica && country.region === "Africa") ||
                                 (isAsia && country.region === "Asia") ||
                                 (isEurope && country.region === "Europe") ||
@@ -232,10 +232,10 @@ export default function Home() {
                                         <span className="text-[14px] font-semibold">Americas</span>
                                     </div>
                                     <div 
-                                        className={`px-[10px] py-[5px] rounded-lg ${isAntartic ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
-                                        onClick={handleFilterAntartic}
+                                        className={`px-[10px] py-[5px] rounded-lg ${isAntarctic ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
+                                        onClick={handleFilterAntarctic}
                                     >
-                                    <span className="text-[14px] font-semibold">Antartic</span>
+										<span className="text-[14px] font-semibold">Antarctic</span>
                                     </div>
                                     <div 
                                         className={`px-[10px] py-[5px] rounded-lg ${isAfrica ? 'bg-[#282B30] text-[#D2D5DA]' : 'bg-[#1B1D1F] text-[#6C727F]'}`}
@@ -348,12 +348,16 @@ export default function Home() {
                                 {
                                     positionNumbers && (
                                         positionNumbers.map( position => (
+										
+										<button
+											 onClick={handlePosition}
+										>
                                             <span 
                                                 className="text-[#6C727F] text-[12px] flex items-center"
                                                 value={position}
-                                                onClick={handlePosition}
                                             >{position}
                                             </span>
+										</button>
                                         ))
                                     )
                                 }
