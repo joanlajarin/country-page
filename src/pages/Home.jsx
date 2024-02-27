@@ -25,18 +25,27 @@ export default function Home() {
     const [isAsia, setIsAsia] = useState(true)
     const [isEurope, setIsEurope] = useState(true)
     const [isOceania, setIsOceania] = useState(true)
+    //Filters 2
+    const [isAmericas2, setIsAmericas2] = useState(true)
+    const [isAntarctic2, setIsAntarctic2] = useState(true)
+    const [isAfrica2, setIsAfrica2] = useState(true)
+    const [isAsia2, setIsAsia2] = useState(true)
+    const [isEurope2, setIsEurope2] = useState(true)
+    const [isOceania2, setIsOceania2] = useState(true)
 
     const [positionNumbers, setPositionNumbers] = useState("")
 
     const handleKeyDown = (event) => {
-		setIsAmericas(!isAmericas)
-		setIsAntarctic(!isAntarctic)
-		setIsAfrica(!isAfrica)
-		setIsAsia(!isAsia)
-		setIsEurope(!isEurope)
-		setIsOceania(!isOceania)
+
 
         if (event.key === 'Enter') {
+            // setIsAmericas2(!isAmericas2)
+            // setIsAntarctic2(!isAntarctic2)
+            // setIsAfrica2(!isAfrica2)
+            // setIsAsia2(!isAsia2)
+            // setIsEurope2(!isEurope2)
+            // setIsOceania2(!isOceania2)
+
             valueInput.trim() === "" ? setCountriesFiltered(countries) : (
                 setCountriesFiltered(countries.filter( country => {
 
@@ -129,20 +138,30 @@ export default function Home() {
 
     const handleFilterAmericas = () => {
         setIsAmericas(!isAmericas)
+        setIsAmericas2(!isAmericas)
+
     }
     const handleFilterAntarctic = () => {
         setIsAntarctic(!isAntarctic)
+        setIsAntarctic2(!isAntarctic)
+
     }
     const handleFilterAfrica = () => {
         setIsAfrica(!isAfrica)
+        setIsAfrica2(!isAfrica)
+
     }
     const handleFilterAsia = () => {
         setIsAsia(!isAsia)
+        setIsAsia2(!isAsia)
     }
     const handleFilterEurope = () => {
+        setIsEurope2(!isEurope)
         setIsEurope(!isEurope)
+
     }
     const handleFilterOceania = () => {
+        setIsOceania2(!isOceania)
         setIsOceania(!isOceania)
     }
 
