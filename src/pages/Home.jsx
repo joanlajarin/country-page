@@ -29,6 +29,13 @@ export default function Home() {
     const [positionNumbers, setPositionNumbers] = useState("")
 
     const handleKeyDown = (event) => {
+		setIsAmericas(!isAmericas)
+		setIsAntarctic(!isAntarctic)
+		setIsAfrica(!isAfrica)
+		setIsAsia(!isAsia)
+		setIsEurope(!isEurope)
+		setIsOceania(!isOceania)
+
         if (event.key === 'Enter') {
             valueInput.trim() === "" ? setCountriesFiltered(countries) : (
                 setCountriesFiltered(countries.filter( country => {
