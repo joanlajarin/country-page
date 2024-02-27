@@ -218,7 +218,7 @@ export default function Home() {
                         />
                     </header>
                     <div className="flex lg:flex-row flex-col gap-[32px]">
-                        <section className="flex flex-col lg:w-[200px] xl:w-[240px] ">
+                        <section className="flex flex-col lg:w-[200px] xl:w-[250px] ">
                             <div className="flex flex-col gap-[8px] lg:w-[200px] xl:w-[240px] ">
                                 <label className="text-[#6C727F] font-semibold text-[12px] lg:w-[200px] xl:w-[240px]">Sort by</label>
                                 <select 
@@ -283,7 +283,7 @@ export default function Home() {
                                             onChange={handleUnMemberCheckboxChange}
                                         /> 
                                         <label 
-                                            className="lg:w-[200px]  xl:w-[240px] text-[#D2D5DA]  text-[14px] font-semibold"
+                                            className="lg:w-[200px]  xl:w-[210px] text-[#D2D5DA]  text-[14px] font-semibold"
                                         > Member of the United Nations
                                         </label> 
                                     </div>
@@ -450,11 +450,11 @@ export default function Home() {
                                 </div>
                             </div>     
                         </div>
-                    ) :
-					(   <div className=" flex flex-col items-center w-[200px] h-[200px]">
-							<h1 className='text-[#D2D5DA]'> Loading</h1>)
-						<div>
-                }
+                    ) :	(   <div className=" flex flex-col items-center w-[200px] h-[200px]">
+							    <h1 className='text-[#D2D5DA]'> Loading</h1>
+						    </div>
+					)
+				}
                 </section>
             </main>
         </section>
