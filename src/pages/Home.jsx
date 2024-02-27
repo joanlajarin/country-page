@@ -77,7 +77,7 @@ export default function Home() {
 
     const fillCountryPage = (countryName) => {
         console.log(countryName)
-        fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+        fetch(`https://restcountries.com/v3.1/name/${countryName}?fullText=true`)
             .then(response => response.json())
                 .then(data => {
                     console.log(data[0])
