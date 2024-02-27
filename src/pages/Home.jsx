@@ -68,6 +68,7 @@ export default function Home() {
     }
 
     const closeCountry = () => {
+		setCountry("")
         setShowCountries(false)
     }
     
@@ -99,7 +100,7 @@ export default function Home() {
     }
 
     const changeCountryPage = (countryName, event) =>{
-        event.stopPropagation()
+
         fillCountryPage(countryName)
     }
     const doNothing = (event) => {
@@ -379,7 +380,7 @@ export default function Home() {
                     onClick={doNothing}        
                 >
                 {
-                    country && (
+                    country ? (
                         <div className=" flex flex-col items-center">
                             <img className="absolute top-[-48px] w-[260px] h-[196px] rounded-xl" src={country.flags.png}></img>
                             <h1 className="text-[32px] text-[#D2D5DA] mt-[164px] mb-[8px]">{country.name.common}</h1>   
@@ -442,7 +443,10 @@ export default function Home() {
                                 </div>
                             </div>     
                         </div>
-                    )
+                    ) :
+					(   <div className=" flex flex-col items-center w-[200px] h-[200px]">
+							<h1 className='text-[#D2D5DA]'> Loading</h1>)
+						<div>
                 }
                 </section>
             </main>
